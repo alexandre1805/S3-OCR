@@ -1,2 +1,2 @@
 main : main.c
-	gcc main.c -o test `sdl2-config --cflags --libs`
+	gcc GUI.h GUI.c main.c -o test `sdl2-config --cflags --libs` `pkg-config --cflags --libs gtk+-3.0`
