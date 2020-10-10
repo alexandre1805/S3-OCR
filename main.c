@@ -7,7 +7,6 @@
 
 int main (int    argc, char **argv)
 {
-  Img_Proc("img-tst.png");
   GtkApplication *app;
   int status;
 
