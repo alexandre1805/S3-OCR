@@ -1,11 +1,13 @@
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
 #include <stdio.h>
 #include <gtk/gtk.h>
 #include "GUI.h"
-
+#include "Img-Proc.h"
 
 int main (int    argc, char **argv)
 {
+  Img_Proc("img-tst.png");
   GtkApplication *app;
   int status;
 

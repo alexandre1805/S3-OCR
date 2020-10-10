@@ -1,4 +1,22 @@
 #include <gtk/gtk.h>
+char *filename;
+GtkWidget *window;
+
+GtkWidget *button;
+GtkWidget *button_box;
+void pin_up_image ()
+{
+  fprintf(stdout,"pinup activé, %s",filename);
+  gtk_widget_destroy(button);
+  gtk_widget_destroy(button_box);
+  GtkWidget *image;
+  GtkWidget *table;
+  table = gtk_grid_new();
+  gtk_container_add(GTK_CONTAINER(window),table);
+  image = gtk_image_new_from_file(filename);
+  gtk_grid_attach(GTK_GRID (table),image,1,10,1,10);
+  gtk_widget_show_all(window);
+}
 
 void open_dialog_box(GtkApplication* app, gpointer user_data)
 {
@@ -11,10 +29,10 @@ void open_dialog_box(GtkApplication* app, gpointer user_data)
  res = gtk_dialog_run(GTK_DIALOG(dialog));
  if(res == GTK_RESPONSE_ACCEPT)
   {
-   char *filename;
    GtkFileChooser *chooser = GTK_FILE_CHOOSER(dialog);
    filename = gtk_file_chooser_get_filename(chooser);
    gtk_widget_destroy(dialog);
+   pin_up_image();
   }
  if(res == GTK_RESPONSE_CANCEL)
  {
@@ -23,9 +41,6 @@ void open_dialog_box(GtkApplication* app, gpointer user_data)
 }
 void activate (GtkApplication* app, gpointer user_data)
 {
-  GtkWidget *window;
-  GtkWidget *button;
-  GtkWidget *button_box;
   GtkWidget *label;
   window = gtk_application_window_new (app);
   gtk_window_set_title (GTK_WINDOW (window), "OCR");
@@ -38,4 +53,5 @@ void activate (GtkApplication* app, gpointer user_data)
   gtk_container_add(GTK_CONTAINER(button_box), button);
   g_signal_connect(G_OBJECT(button),"clicked",G_CALLBACK(open_dialog_box), NULL);
   gtk_widget_show_all (window);
-}
+ 
+} /* gtk_container_remove(GTK_CONTAINER(button_box), button);*/
