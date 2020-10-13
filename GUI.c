@@ -11,15 +11,16 @@ GtkWidget *buttonV;
 GtkWidget *table;
 GtkWidget *entry;
 GtkWidget *label;
-const gchar *angle = "0";
+int *angle = 0;
+
 void validate(){
- angle = gtk_entry_get_text(GTK_ENTRY(entry));
+ angle = (int *) gtk_entry_get_text(GTK_ENTRY(entry));
  gtk_widget_destroy(buttonV);
  gtk_widget_destroy(image);
  gtk_widget_destroy(label);
  gtk_widget_destroy(entry);
  gtk_widget_destroy(table);
- printf("%s", angle);
+ printf("yo %ls", angle);
 }
 void pin_up_image ()
 {
