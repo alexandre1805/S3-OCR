@@ -1,24 +1,51 @@
 #include <gtk/gtk.h>
+#include <gdk-pixbuf/gdk-pixbuf.h>
+
 char *filename;
 GtkWidget *window;
 
 GtkWidget *button;
 GtkWidget *button_box;
+GtkWidget *image;
+GtkWidget *buttonV;
+GtkWidget *table;
+GtkWidget *entry;
+GtkWidget *label;
+const gchar *angle = "0";
+void validate(){
+ angle = gtk_entry_get_text(GTK_ENTRY(entry));
+ gtk_widget_destroy(buttonV);
+ gtk_widget_destroy(image);
+ gtk_widget_destroy(label);
+ gtk_widget_destroy(entry);
+ gtk_widget_destroy(table);
+ printf("%s", angle);
+}
 void pin_up_image ()
 {
-  fprintf(stdout,"pinup activé, %s",filename);
   gtk_widget_destroy(button);
   gtk_widget_destroy(button_box);
-  GtkWidget *image;
-  GtkWidget *table;
+  
   table = gtk_grid_new();
   gtk_container_add(GTK_CONTAINER(window),table);
-  image = gtk_image_new_from_file(filename);
-  gtk_grid_attach(GTK_GRID (table),image,1,10,1,10);
+
+  GdkPixbuf *dest;
+  dest = gdk_pixbuf_new_from_file(filename,NULL);
+  dest = gdk_pixbuf_scale_simple(dest,400,400,GDK_INTERP_BILINEAR);
+  image = gtk_image_new_from_pixbuf(dest);
+
+  label = gtk_label_new("Saisir l'angle de rotation de l'image :");
+  entry = gtk_entry_new();
+  buttonV = gtk_button_new_with_label("Valider");
+  gtk_grid_attach(GTK_GRID(table),entry,0,2,1,1);
+  gtk_grid_attach(GTK_GRID(table),label,0,1,2,1);
+  gtk_grid_attach(GTK_GRID(table),image,0,0,2,1);
+  gtk_grid_attach(GTK_GRID(table),buttonV,1,2,1,1);
+  g_signal_connect(G_OBJECT(buttonV),"clicked",G_CALLBACK(validate),NULL);
   gtk_widget_show_all(window);
 }
 
-void open_dialog_box(GtkApplication* app, gpointer user_data)
+void open_dialog_box()
 {
  GtkWidget *dialog;
  GtkFileChooserAction action = GTK_FILE_CHOOSER_ACTION_OPEN;
@@ -39,12 +66,11 @@ void open_dialog_box(GtkApplication* app, gpointer user_data)
    gtk_widget_destroy(dialog);
  }
 }
-void activate (GtkApplication* app, gpointer user_data)
+void activate (GtkApplication* app)
 {
-  GtkWidget *label;
   window = gtk_application_window_new (app);
   gtk_window_set_title (GTK_WINDOW (window), "OCR");
-  gtk_window_set_default_size (GTK_WINDOW (window), 1280, 720);
+  gtk_window_set_default_size (GTK_WINDOW (window), 600, 600);
 	
   button_box = gtk_button_box_new(GTK_ORIENTATION_HORIZONTAL);
   gtk_container_add(GTK_CONTAINER(window), button_box);

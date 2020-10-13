@@ -62,6 +62,7 @@ SDL_Surface *Load_Image(char *dir){
   printf("Error when loading image : %s",SDL_GetError());
   return image;
  }
+ return NULL;
 }
 
 void Img_Proc(char *dir){
