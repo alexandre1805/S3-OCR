@@ -60,17 +60,17 @@ SDL_Surface *Load_Image(char *dir){
  if(!image)
  {
   printf("Error when loading image : %s",SDL_GetError());
-  return image;
+  return NULL;
  }
- return NULL;
+ return image;
 }
 
-void Img_Proc(char *dir){
- SDL_Surface *image = Load_Image(dir);
+void Binarize(SDL_Surface *image){
+
  int h = image -> h;
  int w = image -> w;
  for(int x = 0; x < w; x++){
-  for(int y = 0; y < h; y++){
+  for(int y = 0; y <h; y++){
    Uint32 pix = Get_pixel(image,x,y);
    Uint8 r = 0;
    Uint8 g = 0;
@@ -92,5 +92,4 @@ void Img_Proc(char *dir){
   putpixel(image,x,y,npix);
   }
  }
- IMG_SavePNG(image,"out.png");
 }
