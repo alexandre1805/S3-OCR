@@ -3,6 +3,8 @@
 #include <SDL2/SDL.h>
 #include "Img-Proc.h"
 #include "Matrix.h"
+
+//convert a SDL surface into matrix
 void Sdl_To_Matrix(SDL_Surface *image, int *array)
 {
  int w = image -> w;
@@ -29,6 +31,8 @@ void Sdl_To_Matrix(SDL_Surface *image, int *array)
  return;
 }
 
+
+// convert a matrix to SDL surface (for test) 
 void Matrix_To_Sdl(int *array,SDL_Surface *image,int w,int h)
 {
  
@@ -50,8 +54,9 @@ void Matrix_To_Sdl(int *array,SDL_Surface *image,int w,int h)
  }
 }
 
-
-void composeMatrix(int *res, int *mat1, int *mat2,int w,int h){
+// function that creates one Matrix with two Matrix
+// if the both matrix have a black pixel the matrix will have a black else white pixel 
+void merge_Matrix(int *res, int *mat1, int *mat2,int w,int h){
  for(int i=0;i<w;i++)
  {
   for(int j=0;j<h;j++)

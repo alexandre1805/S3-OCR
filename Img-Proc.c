@@ -1,8 +1,8 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include "Img-Proc.h"
-
-
+#include "Convolution.h"
+#include <math.h>
 //Get the value of a (x,y) pixel with a Uint32 format (BytesPerPixel)
 Uint32 Get_pixel(SDL_Surface *surface,int x,int y){ 	
    int bpp = surface -> format->BytesPerPixel;
@@ -65,6 +65,7 @@ SDL_Surface *Load_Image(char *dir){
  return image;
 }
 
+//take the average of each color and turn pixel in black or white
 void Binarize(SDL_Surface *image){
 
  int h = image -> h;
@@ -92,4 +93,32 @@ void Binarize(SDL_Surface *image){
   putpixel(image,x,y,npix);
   }
  }
+}
+
+float detectAngle(int *array,int w, int h){
+ printf("%i,%i,%i",array[0],w,h);
+ return 90;
+}
+
+void Rotation(float teta, int *image, int w, int h){
+ teta = teta*0.0174533;
+ int px = w/2;
+ int py = h/2;
+ int *copy = malloc(h*w*sizeof(int));
+ for(int x = 0; x < w; x++){
+  for(int y = 0; y <h; y++){
+   copy[x*h+y] = image[x*h+y];
+   image[x*h+y] = 0;
+  }
+ }
+ for(int x = 0; x < w; x++){
+  for(int y = 0; y <h; y++){
+   int X = (int) ((double) (x-px))*cos((double) teta) - ((double) (y-py))*sin((double) teta)+px;
+   int Y = (int) ((double) (x-px))*sin((double) teta) + ((double) (y-py))*cos((double) teta)+py;
+   if(X >= 0 && X < w && Y >= 0 && Y < h){
+    image[X*h+Y] = copy[x*h+y]; 
+   }
+  }
+ }
+ free(copy);
 }

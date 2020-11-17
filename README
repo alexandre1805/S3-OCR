@@ -1,0 +1,7 @@
+# S3-OCR
+Projet de reconnaissance de caractères à EPITA.
+
+Pour utiliser notre application il faut commencer par avoir une image que nous
+voulons inserer. Lors du lancement de l'application une fe inserer. Lors du lancement de l'application une fenetre va apparaitre.
+Cliquez sur le bouton importer une image et ouvrez la dans l'application.
+Par la suite a l'aide du bouton rotation vouspourrez redresser l'image pour la voir plus facilement.

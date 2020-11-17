@@ -1,6 +1,8 @@
 #include <gtk/gtk.h>
 #include <gdk-pixbuf/gdk-pixbuf.h>
-
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
+#include "Segmentation.h"
 char *filename;
 GtkWidget *window;
 
@@ -11,17 +13,25 @@ GtkWidget *buttonV;
 GtkWidget *table;
 GtkWidget *entry;
 GtkWidget *label;
-int *angle = 0;
+int angle = 0;
 
+// function activated when user click on the button "Valider". 
+// Destroys all widgets and print the angle from the entry
 void validate(){
- angle = (int *) gtk_entry_get_text(GTK_ENTRY(entry));
+ const gchar *agle =  gtk_entry_get_text(GTK_ENTRY(entry));
+ angle = atoi(agle);
  gtk_widget_destroy(buttonV);
  gtk_widget_destroy(image);
  gtk_widget_destroy(label);
  gtk_widget_destroy(entry);
  gtk_widget_destroy(table);
- printf("yo %ls", angle);
+ printf("angle : %d\n", angle);
+ Segmentation(filename,angle);
 }
+
+
+//function activated after clicking on "Ouvrir" in dialog box
+//it creates a gtk tabkle which contain the image, a label, an entry and a button
 void pin_up_image ()
 {
   gtk_widget_destroy(button);
@@ -30,9 +40,13 @@ void pin_up_image ()
   table = gtk_grid_new();
   gtk_container_add(GTK_CONTAINER(window),table);
 
+  SDL_Surface *img = IMG_Load(filename);
+  int h = img->h;
+  int w = img->w;
+  free(img);
   GdkPixbuf *dest;
   dest = gdk_pixbuf_new_from_file(filename,NULL);
-  dest = gdk_pixbuf_scale_simple(dest,400,400,GDK_INTERP_BILINEAR);
+  dest = gdk_pixbuf_scale_simple(dest,w/3,h/3,GDK_INTERP_BILINEAR);
   image = gtk_image_new_from_pixbuf(dest);
 
   label = gtk_label_new("Saisir l'angle de rotation de l'image :");
@@ -46,6 +60,8 @@ void pin_up_image ()
   gtk_widget_show_all(window);
 }
 
+//function activated with the button "Importer une image"
+//this function creates a dialog box and create a link with the function "pin_up_image" and the button "Ouvrir"
 void open_dialog_box()
 {
  GtkWidget *dialog;
@@ -67,6 +83,8 @@ void open_dialog_box()
    gtk_widget_destroy(dialog);
  }
 }
+// function called just after openning the application in main
+// it creates a button and link it with "open_dialog_box"
 void activate (GtkApplication* app)
 {
   window = gtk_application_window_new (app);
@@ -81,4 +99,4 @@ void activate (GtkApplication* app)
   g_signal_connect(G_OBJECT(button),"clicked",G_CALLBACK(open_dialog_box), NULL);
   gtk_widget_show_all (window);
  
-} /* gtk_container_remove(GTK_CONTAINER(button_box), button);*/
+}

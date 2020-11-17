@@ -1,0 +1,12 @@
+hiddenNeuron1 data
+4.115371
+4.118785
+-6.311377
+hiddenNeuron2 data
+6.373825
+6.373960
+-2.766814
+outputNeuron data
+-9.236022
+8.469790
+-3.839565
