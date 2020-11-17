@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include "sigmoid.h"
 
-double Exponentiel (double x)
+double Exponentiel(double x)
 {
 	int inverse = 0;
 	double n = 0;
@@ -15,7 +15,7 @@ double Exponentiel (double x)
 	}
 	while (x >= 2)
 	{
-		x /=2;
+		x /= 2;
 		n++;
 	}
 	x /= 16;
@@ -25,24 +25,23 @@ double Exponentiel (double x)
 	{
 		dl += q;
 		i++;
-		q = q*x/i;
+		q = q * x / i;
 	}
 	for (i = 1; i <= n; i++)
 	{
-		dl=dl*dl;
+		dl = dl * dl;
 	}
 	if (inverse)
-		dl = 1/dl;
+		dl = 1 / dl;
 	return dl;
 }
 
-double sigmoid (double x)
+double sigmoid(double x)
 {
-	return 1.0/(1.0 + Exponentiel(-x));
+	return 1.0 / (1.0 + Exponentiel(-x));
 }
 
-double deriv_sigmoid (double x)
+double deriv_sigmoid(double x)
 {
-	return x*(1-x);
+	return x * (1 - x);
 }
-

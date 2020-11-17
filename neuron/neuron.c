@@ -5,7 +5,7 @@
 
 double output(struct Neuron N)
 {
-	double forsig = (N.weight[0]*N.input[0] + N.weight[1]*N.input[1]+ N.biasWeight);
+	double forsig = (N.weight[0] * N.input[0] + N.weight[1] * N.input[1] + N.biasWeight);
 	double out = sigmoid(forsig);
 	return out;
 }
@@ -19,9 +19,9 @@ double randfrom(double min, double max)
 
 struct Neuron randomizeWeights(struct Neuron N)
 {
-	N.weight[0] = randfrom(0.0,1.0);
-	N.weight[1] = randfrom(0.0,1.0);
-	N.biasWeight = randfrom(0.0,1.0);
+	N.weight[0] = randfrom(0.0, 1.0);
+	N.weight[1] = randfrom(0.0, 1.0);
+	N.biasWeight = randfrom(0.0, 1.0);
 	return N;
 }
 
