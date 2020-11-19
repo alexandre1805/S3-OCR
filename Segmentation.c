@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include "Segmentation.h"
 #include "Matrix.h"
 #include "Img-Proc.h"
@@ -37,7 +38,7 @@ void Segmentation(char *filename, int angle)
   }
   int *car = malloc(L1 * l1 * sizeof(int));
   create_line(array, car, coord, L1, L, l, nb, h);
-  detect_char(car, L1, l, L, nb);
+  int nbchar = detect_char(car, L1, l, L, nb);
   SDL_Surface *surface = SDL_CreateRGBSurface(0, l1, L1, 32, 0, 0, 0, 0);
   Matrix_To_Sdl(car, surface, l1, L1);
   IMG_SavePNG(surface, "out.png");
@@ -209,11 +210,13 @@ void create_line(int *array, int *car, int *coord, int L1, int *L, int *l, int n
 
 // watch in each colmune of each if there is an column with only white pixel and color it
 // able to detect spaces
-void detect_char(int *car, int L1, int *l, int *L, int nb)
+int detect_char(int *car, int L1, int *l, int *L, int nb)
 {
+  int nb_cuts = 0;
   int biais = 0;
   for (int n = 0; n < nb; n++)
   {
+    int nb_tmp = 0;
     for (int x = 0; x < l[n]; x++)
     {
       if (car[x * L1 + biais] == 0)
@@ -242,9 +245,12 @@ void detect_char(int *car, int L1, int *l, int *L, int nb)
           {
             car[x * L1 + y + biais] = 1;
           }
+	  nb_tmp++;
         }
       }
     }
     biais = biais + L[n];
+    nb_cuts = fmax(nb_cuts,nb_tmp);
   }
+  return nb_cuts;
 }
