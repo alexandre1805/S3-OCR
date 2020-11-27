@@ -39,6 +39,8 @@ void Segmentation(char *filename, int angle)
   int *car = malloc(L1 * l1 * sizeof(int));
   create_line(array, car, coord, L1, L, l, nb, h);
   int nbchar = detect_char(car, L1, l, L, nb);
+  int *cuts_coord = malloc(nbchar*nb*sizeof(int));
+  find_cuts(cuts_coord,car,L1,l,L,nb);
   SDL_Surface *surface = SDL_CreateRGBSurface(0, l1, L1, 32, 0, 0, 0, 0);
   Matrix_To_Sdl(car, surface, l1, L1);
   IMG_SavePNG(surface, "out.png");
@@ -253,4 +255,82 @@ int detect_char(int *car, int L1, int *l, int *L, int nb)
     nb_cuts = fmax(nb_cuts,nb_tmp);
   }
   return nb_cuts;
+}
+
+void find_cuts(int *cut_coords,int *car,int L1, int *l, int *L, int nb)
+{
+  int h =0;
+  cut_coords[0] = 0;
+  int biais = 0;
+  for (int n = 0; n < nb; n++)
+  {
+    int len = 0;
+    for (int x = 0; x < l[n]; x++)
+    {
+     int black_line = 1;
+     for (int y = 0; y < L[n]; y++)
+      {
+       if(car[x * L1 + y + biais] == 0){
+        black_line = 0;
+       }
+      }
+     car[x * L1 + 0 + biais] = 1;
+     if(black_line == 1 && len != 0){
+       int *incar = calloc((x-len)*L[n],sizeof(int));
+       for (int y1 = 0; y1 < L[n]; y1++)
+       {
+        int x2 = 0;
+        for(int x1 = x-(x-len)+1;x1<x;x1++)
+        {
+         incar[x2*L[n]+y1] = car[x1*L1+y1+biais];
+	 x2++;
+        }
+       }
+      if((float)(x-len)/(float)L[n] > 0.12){
+       int *resolt = calloc(28*28,sizeof(int));
+       if(L[n] <= 28 && (x-len) <= 28)
+       {
+        for(int i = 0;i<(x-len);i++){
+         for(int j = 0;j<L[n];j++){
+          resolt[((28-(x-len))/2+i)*28+j+(28-L[n])/2] = incar[i*L[n]+j];
+         }
+        }
+       }
+       else if((x-len) <= 28)
+       {
+        for(int i = 0;i<(x-len);i++){
+         for(int j = 0;j<28;j++){
+          resolt[((28-(x-len))/2+i)*28+j] = incar[i*L[n]+((j*L[n])/28)];
+         }
+       	}
+       }
+       else{
+        for(int i = 0;i<28;i++){
+         for(int j = 0;j<28;j++){
+	   resolt[i*28+j] = incar[((i*(x-len))/28)*L[n]+((j*L[n])/28)];
+	 }
+        }
+       }
+       SDL_Surface *surface = SDL_CreateRGBSurface(0, 28, 28, 32, 0, 0, 0, 0);
+       Matrix_To_Sdl(resolt, surface, 28, 28);
+       char *result = malloc(sizeof(char)*4);
+       sprintf(result, "%i", h); 
+       IMG_SavePNG(surface, result);
+       h++;
+       len = x;
+       free(incar);
+       free(result);
+       SDL_FreeSurface(surface);
+       }
+       else {
+        len = x;
+       }
+      }
+      if(len == 0 && black_line == 1){
+       len = x;
+      }
+    }
+    len = 0;
+    biais = biais + L[n];
+  }
 }
