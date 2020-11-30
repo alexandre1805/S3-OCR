@@ -241,7 +241,7 @@ int detect_char(int *car, int L1, int *l, int *L, int nb)
             black_after++;
           }
         }
-        if (((float)blank / (float)L[n]) < 0.1 && black_before != L[n] && (black_before != 0 || (black_after != 0 && black_after != L[n])))
+        if (((float)blank / (float)L[n]) <= 0.1 && black_before != L[n] && (black_before != 0 || (black_after != 0 && black_after != L[n])))
         {
           for (int y = 0; y < L[n]; y++)
           {
@@ -274,7 +274,6 @@ void find_cuts(int *cut_coords,int *car,int L1, int *l, int *L, int nb)
         black_line = 0;
        }
       }
-     car[x * L1 + 0 + biais] = 1;
      if(black_line == 1 && len != 0){
        int *incar = calloc((x-len)*L[n],sizeof(int));
        for (int y1 = 0; y1 < L[n]; y1++)
@@ -315,7 +314,7 @@ void find_cuts(int *cut_coords,int *car,int L1, int *l, int *L, int nb)
        Matrix_To_Sdl(resolt, surface, 28, 28);
        char *result = malloc(sizeof(char)*4);
        sprintf(result, "%i", h); 
-       IMG_SavePNG(surface, result);
+       //IMG_SavePNG(surface, result);
        h++;
        len = x;
        free(incar);

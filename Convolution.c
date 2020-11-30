@@ -215,7 +215,7 @@ void Contrast(int *image, float *copy, int w, int h)
       }
       else
       {
-        if (((copy[x * h + y] * 8) - copy[(x - 1) * h + y] - copy[(x + 1) * h + y] - copy[x * h + (y - 1)] - copy[x * h + (y - 1)]) >= 0.5)
+        if (((copy[x * h + y] * 8) - copy[(x - 1) * h + y] - copy[(x + 1) * h + y] - copy[x * h + (y - 1)] - copy[x * h + (y - 1)]) >= 0.7)
         {
           image[x * h + y] = 1;
         }
