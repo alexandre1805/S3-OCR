@@ -1,4 +1,3 @@
-#include <stdint.h>
 #include <SDL2/SDL.h>
 
 void Sdl_To_Matrix(SDL_Surface *image, int *array);

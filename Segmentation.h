@@ -1,4 +1,4 @@
-void Segmentation(char *filename, int angle);
+void Segmentation(char *filename, int angle, int detection);
 void vertical_Segmentation(int *array, int h, int w);
 void horizontal_Segmentation(int *array, int h, int w);
 void Block_Segmentation(int *array, int *res, int h, int w);

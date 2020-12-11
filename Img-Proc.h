@@ -1,4 +1,3 @@
-#include <stdint.h>
 #include <SDL2/SDL.h>
 
 void IMG_Processing(char *dir);

@@ -135,11 +135,11 @@ void Median(int *image, int *copy, int w, int h)
 
         array_select_sort(L, 9);
 
-        if (image[x * h + y] == 1 && L[7] == 0)
+        if (image[x * h + y] == 1 && L[6] == 0)
         {
           image[x * h + y] = 0;
         }
-        if (image[x * h + y] == 0 && L[1] == 1)
+        if (image[x * h + y] == 0 && L[2] == 1)
         {
           image[x * h + y] = 1;
         }
@@ -183,7 +183,23 @@ void Gauss(float *image, int *copy, int w, int h)
       }
       else
       {
-        image[x * h + y] = (((float)copy[(x - 1) * h + (y - 1)]) / 16) + (((float)copy[(x - 1) * h + y]) / 8) + (((float)copy[(x - 1) * h + (y + 1)]) / 16) + (((float)copy[x * h + (y - 1)]) / 8) + (((float)copy[x * h + y]) / 4) + (((float)copy[x * h + (y + 1)]) / 8) + (((float)copy[(x + 1) * h + (y - 1)]) / 16) + (((float)copy[(x + 1) * h + y]) / 8) + (((float)copy[(x + 1) * h + (y + 1)]) / 16);
+	float res = (float) copy[(x - 1) * h + (y - 1)] / 16 +
+		    (float) copy[(x - 1) * h + y      ] / 8  +
+		    (float) copy[(x - 1) * h + (y + 1)] / 16 +
+		    (float) copy[ x      * h + (y - 1)] / 8  +
+		    (float) copy[ x      * h +  y]      / 4  +
+		    (float) copy[ x      * h + (y + 1)] / 8  +
+                    (float) copy[(x + 1) * h + (y - 1)] / 16 +
+                    (float) copy[(x + 1) * h +  y]      / 8  +
+                    (float) copy[(x + 1) * h + (y + 1)] / 16;
+
+	if(res >= 0.3) 
+	{
+	image[x * h + y] = 1;
+	}
+	else{
+	 image[x*h+y] = 0;
+	}
       }
     }
   }
@@ -215,7 +231,7 @@ void Contrast(int *image, float *copy, int w, int h)
       }
       else
       {
-        if (((copy[x * h + y] * 8) - copy[(x - 1) * h + y] - copy[(x + 1) * h + y] - copy[x * h + (y - 1)] - copy[x * h + (y - 1)]) >= 0.7)
+        if (((copy[x * h + y] * 5) - copy[(x - 1) * h + y] - copy[(x + 1) * h + y] - copy[x * h + (y - 1)] - copy[x * h + (y - 1)]) > 0)
         {
           image[x * h + y] = 1;
         }

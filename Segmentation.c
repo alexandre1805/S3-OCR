@@ -6,7 +6,8 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include "Convolution.h"
-void Segmentation(char *filename, int angle)
+#include "finalocr.h"
+void Segmentation(char *filename, int angle,int detection)
 {
   SDL_Surface *image = Load_Image(filename);
   int h = image->h;
@@ -14,7 +15,10 @@ void Segmentation(char *filename, int angle)
   Binarize(image);
   int *array = malloc(h * w * sizeof(int));
   Sdl_To_Matrix(image, array);
-  detectAngle(array, w, h);
+  if(detection == 1){
+   //angle = detectAngle(array, w, h);
+  }
+  printf("Segmentation active");
   Rotation(angle, array, w, h);
   Matrix_To_Sdl(array, image, w, h);
   IMG_SavePNG(image, "angle.png");
@@ -241,7 +245,7 @@ int detect_char(int *car, int L1, int *l, int *L, int nb)
             black_after++;
           }
         }
-        if (((float)blank / (float)L[n]) <= 0.1 && black_before != L[n] && (black_before != 0 || (black_after != 0 && black_after != L[n])))
+        if (((float)blank / (float)L[n]) <= 0 && black_before != L[n] && (black_before != 0 || (black_after != 0 && black_after != L[n])))
         {
           for (int y = 0; y < L[n]; y++)
           {
@@ -259,6 +263,7 @@ int detect_char(int *car, int L1, int *l, int *L, int nb)
 
 void find_cuts(int *cut_coords,int *car,int L1, int *l, int *L, int nb)
 {
+  init_Reseau();
   int h =0;
   cut_coords[0] = 0;
   int biais = 0;
@@ -315,6 +320,7 @@ void find_cuts(int *cut_coords,int *car,int L1, int *l, int *L, int nb)
        char *result = malloc(sizeof(char)*4);
        sprintf(result, "%i", h); 
        //IMG_SavePNG(surface, result);
+       printf("%c",answer(resolt));
        h++;
        len = x;
        free(incar);
